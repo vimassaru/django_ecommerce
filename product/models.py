@@ -1,6 +1,8 @@
 from django.db import models
-from PIL import Image
 from django.conf import settings
+from django.utils.text import slugify
+
+from PIL import Image
 
 """
 Product:
@@ -19,15 +21,19 @@ Product:
 
 class Product(models.Model):
     product_name = models.CharField(
-        default='name_product',
+        default='name',
         max_length=255, blank=True)
     short_description = models.TextField(max_length=255)
     long_description = models.TextField()
     image = models.ImageField(
         upload_to='product_image/%Y/%m/', blank=True, null=True)
-    slug = models.SlugField(unique=True)
-    marketing_price = models.FloatField()
-    marketing_off_price = models.FloatField(default=0)
+    slug = models.SlugField(
+        unique=True,
+        blank=True,
+        null=True)
+    marketing_price = models.FloatField(verbose_name='Price')
+    marketing_off_price = models.FloatField(
+        default=0, verbose_name='Off Price')
     product_type = models.CharField(
         default='V',
         max_length=1,
@@ -36,6 +42,16 @@ class Product(models.Model):
             ('S', 'Simple'),
         )
     )
+
+    def get_formatted_price(self):
+        return f'USD$ {self.marketing_price:.2f}'
+
+    get_formatted_price.short_description = 'Price'
+
+    def get_formatted_off_price(self):
+        return f'USD$ {self.marketing_off_price:.2f}'
+
+    get_formatted_off_price.short_description = 'Off Price'
 
     @staticmethod
     def resize_image(img, new_width=800):
@@ -61,6 +77,10 @@ class Product(models.Model):
         print('Resize applyed')
 
     def save(self, *args, **kwargs):
+        if not self.slug:
+            slug = f'{slugify(self.product_name)}'
+            self.slug = slug
+
         super().save(*args, **kwargs)
 
         max_image_size = 800
