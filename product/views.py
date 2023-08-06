@@ -1,8 +1,10 @@
-# from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
+from django.contrib import messages
+
 from . import models
 
 
@@ -21,9 +23,38 @@ class ProductDetail(DetailView):
 
 
 class AddToCart(View):
-    # TODO: Remove this log before production
     def get(self, *args, **kwargs):
-        return HttpResponse('Add to Cart')
+
+        http_refer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('product:list')
+        )
+
+        id_variation = self.request.GET.get('vid')
+
+        if not id_variation:
+            messages.error(
+                self.request,
+                "Product doesn't exist."
+            )
+            return redirect(http_refer)
+
+        variation = get_object_or_404(models.Variation, id=id_variation)
+
+        if not self.request.session.get('shop_cart'):
+            self.request.session['shop_cart'] = {}
+            self.request.session.save()
+
+        shop_cart = self.request.session['shop_cart']
+
+        if id_variation in shop_cart:
+            # TODO: Variation exist in cart
+            pass
+        else:
+            # TODO: Variation doesn't exist in cart
+            pass
+
+        return HttpResponse(f'{variation.product} {variation.product_name}')
 
 
 class RemoveFromCart(View):

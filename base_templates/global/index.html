@@ -13,6 +13,7 @@
     {% include 'global/partials/_navbar.html' %}
 
     <main class="section">
+      {% include "global/partials/_messages.html" %}
       <div class="columns  is-half-desktop is-3 is-multiline">
         {% block content %}{% endblock content %}
       </div>

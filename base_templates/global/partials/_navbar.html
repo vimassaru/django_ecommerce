@@ -5,7 +5,7 @@
         <a class="navbar-item" href="{% url 'product:list' %}">
           <span class="icon-text">
             <span class="mdi mdi-sigma"></span>
-            <span>Ecommerce</span>
+            <span>-commerce</span>
           </span>
         </a>
       </div>
@@ -19,7 +19,14 @@
   <div id="navMenu" class="navbar-menu subtitle">
     <div class="navbar-start">
       <a href="{% url 'product:list' %}" class="navbar-item">Explore</a>
-      <a href="#" class="navbar-item">Shop Cart</a>
+      <a href="#" class="navbar-item">
+        <span class="icon">
+          <i class="fa-solid fa-cart-shopping"></i>
+        </span>
+        <span class="content">
+          Shop Cart
+        <span>
+      </a>
       <a href="#" class="navbar-item">Profile</a>
     </div>
   </div>

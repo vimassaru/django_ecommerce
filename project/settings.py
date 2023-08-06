@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'product',
     'userprofile',
     'order',
+    'fontawesomefree',
 
     # TODO: remove debbuging toolbar
     "debug_toolbar",
