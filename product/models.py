@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.text import slugify
 
+from utils import utils
 from PIL import Image
 
 """
@@ -44,12 +45,12 @@ class Product(models.Model):
     )
 
     def get_formatted_price(self):
-        return f'USD$ {self.marketing_price:.2f}'
+        return utils.us_price_formatted(self.marketing_price)
 
     get_formatted_price.short_description = 'Price'
 
     def get_formatted_off_price(self):
-        return f'USD$ {self.marketing_off_price:.2f}'
+        return utils.us_price_formatted(self.marketing_off_price)
 
     get_formatted_off_price.short_description = 'Off Price'
 

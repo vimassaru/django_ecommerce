@@ -1,0 +1,28 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    {% include 'global/partials/_head.html' %}
+
+    <title>{% block page_title %}{% endblock page_title %} E-commerce</title>
+</head>
+
+<body>
+    {% include 'global/partials/_navbar.html' %}
+
+    <main class="section">
+      <div class="columns  is-half-desktop is-3 is-multiline">
+        {% block content %}{% endblock content %}
+      </div>
+
+      <div class="container">
+        {% include 'global/partials/_pagination.html' %}
+      </div>
+    </main>
+
+    {% include 'global/partials/_footer.html' %}
+</body>
+
+</html>

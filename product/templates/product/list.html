@@ -1,0 +1,44 @@
+{% extends 'global/index.html' %}
+{% load vmfilters %}
+
+{% block content %}
+  {% for product in products %}
+    <div class="column is-4">
+        <div class="card">
+          <div class="card-image">
+            <figure class="image is-square">
+              {% if product.image %}
+                <a href="{{ product.slug }}">
+                  <img src="{{ product.image.url }}" 
+                    alt="{{ product.product_name }}">
+                </a>
+              {% endif %}
+            </figure>
+          </div>
+          <div class="card-content">
+            <div class="content">
+              <h4 class="subtitle is-6"> {{ product.product_name }}</h4>
+              <p> {{ product.short_description }}</p>
+            </div>
+            <div class="content has-text-centered">
+              {% if product.marketing_off_price %}
+                <span class="title is-4">
+                  {{ product.marketing_off_price | price_formatted }}
+                </span>
+                <span class="title is-6 has-text-grey-light">
+                  <s>{{ product.marketing_price | price_formatted }}</s>
+                </span>
+              {% else %}
+              <span class="title is-4">
+                {{ product.marketing_price | price_formatted }}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+          <footer class="card-footer">
+            <a href="{{ product.slug }}" class="card-footer-item">Shop Item</a>
+          </footer>
+        </div>
+      </div>
+  {% endfor %}
+{% endblock content %}

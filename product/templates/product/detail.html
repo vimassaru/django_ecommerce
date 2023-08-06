@@ -1,0 +1,74 @@
+{% extends 'global/index.html' %}
+{% load vmfilters %}
+
+{% block content %}
+  <div class="section">
+    <div class="tile is-parent">
+        <div class="tile is-chield is-justify-content-center">
+            <div class="card is-flex-direction-row">
+              <div class="card-image">
+                  {% if product.image %}
+                    <figure class="image is-1by1">
+                      <img alt="{{ product.product_name }}"
+                        src="{{ product.image.url }}">
+                    </figure>
+                  {% endif %}
+              </div>
+
+              <div class="card-content">
+                <div class="content">
+                  <h1 class="title is-2">{{ product.product_name }}</h1>
+                  <p class="content is-size-4">{{ product.short_description }}</p>
+                  <p class="subtitle is-4">
+                    {% if product.marketing_off_price %}
+                      <span id="variation-off-price"
+                        class="subtitle is-4">{{ product.marketing_off_price | price_formatted}}
+                      </span>
+                      <s><span id="variation-price" class="subtitle is-4 product-price">{{ product.marketing_price | price_formatted }}</span></s>
+                    {% else %}
+                      <span id="variation-price" class="subtitle is-4 product-price">{{ product.marketing_price | price_formatted}}</span>
+                    {% endif %}
+                  </p>
+
+                  <form action="/addtocart/" id="form-add-to-cart">
+                      <div class="field is-grouped">
+                        <div class="control">
+                            <select id="select-variations" name="vid" class="select">
+                                {% for variation in product.variation_set.all %}
+                                  {% if variation.marketing_off_price %}
+                                    <option data-price="
+                                      {{ variation.marketing_price}}"
+                                      data-off-price="
+                                      {{ variation.marketing_off_price }}"
+                                      value="{{ variation.id }}"
+                                    >
+                                      {{ variation.product_name }}
+                                    </option>
+                                  {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="control">
+                            <button type="submit" class="button is-success">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                Adicionar ao carrinho
+                            </button>
+                        </div>
+
+                      </div>
+                    </form>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="col-lg-12">
+                <h2 class="text-center">{{ product.product_name | linebreaks }}</h2>
+                <p> {{ product.long_description }} </p>
+        </div>
+    </div>
+  </div>
+{% endblock content %}
