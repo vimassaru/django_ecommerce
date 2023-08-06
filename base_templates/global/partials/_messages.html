@@ -1,7 +1,7 @@
 {% if messages %}
     <br>
     {% for message in messages %}
-        <div class="message is-danger {{ message.tags }}" role="alert">
+        <div class="message {{ message.tags }}" role="alert">
             <div class="message-body">
                 {{ message }}
             </div>

@@ -151,11 +151,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MESSAGE_TAGS = {
-    constants.DEBUG: 'alert-info',
-    constants.ERROR: 'alert-danger',
-    constants.INFO: 'alert-info',
-    constants.SUCCESS: 'alert-success',
-    constants.WARNING: 'alert-warning',
+    constants.DEBUG: 'is-info',
+    constants.ERROR: 'is-danger',
+    constants.INFO: 'is-info',
+    constants.SUCCESS: 'is-success',
+    constants.WARNING: 'is-warning',
 }
 
 # Sessão em dias: 60s * 60m * 24h * 1d
