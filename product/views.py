@@ -119,12 +119,43 @@ class AddToCart(View):
 class RemoveFromCart(View):
     # TODO: Remove this log before production
     def get(self, *args, **kwargs):
-        return HttpResponse('Remove From Cart')
+        http_refer = self.request.META.get(
+            'HTTP_REFERER',
+            reverse('product:list')
+        )
+
+        id_variation = self.request.GET.get('vid')
+
+        if not id_variation:
+            return redirect(http_refer)
+
+        if not self.request.session.get('shop_cart'):
+            return redirect(http_refer)
+
+        if id_variation not in self.request.session['shop_cart']:
+            return redirect(http_refer)
+
+        shop_cart = self.request.session['shop_cart'][id_variation]
+
+        messages.success(
+            self.request,
+            f'Successfully removed {shop_cart["product_name"]} '
+            f'{shop_cart["variation_name"]}'
+            f'from your shopping cart.'
+        )
+
+        del self.request.session['shop_cart'][id_variation]
+        self.request.session.save()
+        return redirect(http_refer)
 
 
 class ShopCart(View):
     def get(self, *args, **kwargs):
-        return render(self.request, 'product/shop_cart.html')
+        context = {
+            'shop_cart': self.request.session.get('shop_cart', {})
+        }
+
+        return render(self.request, 'product/shop_cart.html', context)
 
 
 class Checkout(View):

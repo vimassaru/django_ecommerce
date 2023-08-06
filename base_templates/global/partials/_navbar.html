@@ -1,3 +1,5 @@
+{% load vmfilters %}
+
 <nav class="navbar is-dark is-transparent is-spaced">
   <div class="container">
     <div class="navbar-brand title is-3 is-family-monospace has-text-white-ter">
@@ -19,14 +21,23 @@
   <div id="navMenu" class="navbar-menu subtitle">
     <div class="navbar-start">
       <a href="{% url 'product:list' %}" class="navbar-item">Explore</a>
-      <a href="#" class="navbar-item">
-        <span class="icon">
-          <i class="fa-solid fa-cart-shopping"></i>
-        </span>
-        <span class="content">
-          Shop Cart
-        <span>
-      </a>
+      {% if request.session.shop_cart %}
+        <a href="{% url 'product:shopcart' %}" class="navbar-item">
+          <div class="container">
+            <span class="icon">
+              <i class="fa-solid fa-cart-shopping"></i>
+            </span>
+            <span>
+              <strong class="content has-text-light">
+                {{ request.session.shop_cart | total_shop_cart_amount }}x
+              </strong>
+            </span>
+            <span class="content">
+              Shop Cart
+            <span> 
+          </div>
+        </a>
+      {% endif %}
       <a href="#" class="navbar-item">Profile</a>
     </div>
   </div>

@@ -1,7 +1,107 @@
 {% extends 'global/index.html' %}
+{% load vmfilters %}
+{% load static %}
 
 {% block content %}
 
-{{ request.session.shop_cart }}
+  <div class="box">
+  {% if shop_cart %}
+    <div class="columns">
+      <div class="column">
+          <div class="content">
+            <h3>Carrinho de compras</h3>
+            <p class="lead">Os produtos, quantidades e preços que você escolheu.</p>
 
+            <div class="table-container">
+              <table class="table is-striped is-fullwidth is-hoverable">
+                <caption class="title is-4">
+                  Summary
+                </caption>
+                <thead>
+                  <tr>
+                    <th class="title is-6">Image</th>
+                    <th class="title is-6">Product</th>
+                    <th class="title is-6">V.</th>
+                    <th class="title is-6">Qty.</th>
+                    <th class="title is-6">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for row in shop_cart.values %}
+                    <tr>
+                        <td>
+                          <figure class="image is-256x256">
+                            <img alt="Product Image"
+                            src="{% get_media_prefix %}{{ row.image }}">
+                          </figure>
+                        </td>
+                        <td>
+                            <a href="{% url 'product:detail' row.slug %}">
+                              {{ row.product_name }}
+                            </a>  
+                            <a class="icon has-text-danger" 
+                              href="{% url 'product:removefromcart' %}?vid={{ row.id_variation }} ">
+                              <i class="fas fa-times-circle"
+                                aria-hidden="true"></i>
+                            </a>
+                        </td>
+                        <td> {{ row.variation_name }} </td>
+                        <td> 
+                          {{ row.amount }}x 
+                          {% if row.unit_off_price %}
+                            {{ row.unit_off_price }}
+                          {% else %}
+                          {{ row.unit_off_price }}
+                          {% endif %}
+                        </td>
+
+                        {% if row.quantitative_off_price %}
+                          <td>
+                            {{ row.quantitative_off_price | price_formatted }}
+                          </td>
+                        {% else %}
+                          <td>
+                            {{ row.quantitative_price  | price_formatted }}
+                          </td>
+                        {% endif %}
+                        
+                      </tr> 
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+          <p class='lead'>Total no carrinho</p>
+
+          <div class='table-responsive'>
+              <table class="table">
+                  <tr>
+                      <td class="font-weight-bold">Total</td>
+                      <td>R$100000</td>
+                  </tr>
+              </table>
+          </div>
+      </div>
+      <div class="column">
+          <a class="button is-success" href="#">
+              Finalizar a compra
+          </a>
+      </div>
+    </div>
+  
+  {% else %}
+    <div class="columns">
+      <div class="column">
+        <div class="content">
+          <h3 class="title">Shop Cart</h3>
+          <p class="subtitle">Your shopping cart is empty</p>
+        </div>
+      </div>
+  {% endif %}
+  </div>
 {% endblock content %}
