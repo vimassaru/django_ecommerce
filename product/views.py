@@ -1,11 +1,48 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
-from django.http import HttpResponse
+# from django.http import HttpResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views import View
 from django.contrib import messages
+from django.conf import settings
+from django.urls import reverse as rev
 
+from paypal.standard.forms import PayPalPaymentsForm
 from . import models
+import uuid
+
+
+def paypal_transaction(request):
+
+    # What you want the button to do.
+    paypal_dict = {
+        "business": settings.PAYPAL_RECEIVER_EMAIL,
+        "amount": "50.00",
+        "item_name": "Order {1}",
+        "invoice": str(uuid.uuid4()),
+        "currency_code": 'USD',
+        "notify_url": request.build_absolute_uri(rev('paypal-ipn')),
+        "return": request.build_absolute_uri(rev('your-return-view')),
+        "cancel_return": request.build_absolute_uri(
+            rev('your-cancel-view')),
+        # Custom command to correlate to some function later (optional)
+        "custom": "premium_plan",
+    }
+
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    context = {"form": form}
+    return render(request, "product/shop_cart.html", context)
+
+
+def payment_success(request):
+    messages.success(request, 'Payment was successful.')
+    return render(request, 'product/success_paypal.html')
+
+
+def payment_cancelled(request):
+    messages.warning(request, 'Payment cancelled.')
+    return render(request, 'product/cancelled_paypal.html')
 
 
 class ProductList(ListView):
@@ -159,6 +196,10 @@ class ShopCart(View):
 
 
 class Checkout(View):
-    # TODO: Remove this log before production
+    template_name = 'product/paypal.html'
+
     def get(self, *args, **kwargs):
-        return HttpResponse('Checkout')
+        return render(
+            self.request,
+            'product/paypal.html'
+        )

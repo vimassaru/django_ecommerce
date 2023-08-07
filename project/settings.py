@@ -29,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
 # TODO: remove debug config
 INTERNAL_IPS = [
     # ...
@@ -50,10 +51,18 @@ INSTALLED_APPS = [
     'userprofile',
     'order',
     'fontawesomefree',
+    'crispy_forms',
+    'crispy_bulma',
+    'paypal.standard.ipn',
+
 
     # TODO: remove debbuging toolbar
     "debug_toolbar",
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = ("bulma",)
+
+CRISPY_TEMPLATE_PACK = 'bulma'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -170,3 +179,9 @@ SESSION_SAVE_EVERY_REQUEST = False
 # Para sessions em arquivos ao invés da base de dados
 # SESSION_ENGINE = "django.contrib.sessions.backends.file"
 # SESSION_FILE_PATH = '/home/luizotavio/Desktop/temp'
+
+# Using Local Variables
+try:
+    from project.local_settings import *
+except ImportError:
+    ...

@@ -1,0 +1,31 @@
+{% extends 'global/index.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <main class="main is-flex">
+      <div class="columns">
+        <div class="section column">
+          <div class="box">
+            <h2 class="title is-3"> Login </h2>
+              {% include 'userprofile/login_page.html' %}
+          </div>
+        </div>
+        <div class="section column">
+          <div class="box">
+            <div class="content">
+              <h2 class="title is-3"> Register </h2>
+              <form method="POST" action="">
+                {% csrf_token %}
+                {{ userform|crispy }}
+                {{ perfilform|crispy }}
+
+                <button type="submit" class="button is-success">
+                  Register Account
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  </main>
+{% endblock content %}
