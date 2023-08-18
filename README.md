@@ -21,4 +21,6 @@ pip install -r requirements.txt
 
 # Spotlight
 
+Abaixo segue o link para visualização do projeto onde é possível visualizar detalhes como as views, usuários e carrinho com itens para compra.
+
 [Video Demo](https://drive.google.com/file/d/1lCBdgeEzTduC-mab-8pHMvQz1b2czU4d/view?usp=drive_link)
